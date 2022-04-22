@@ -1,6 +1,4 @@
-use std::{
-    collections::HashMap, env, error::Error, ffi::OsStr, fmt, path::PathBuf, process::Command,
-};
+use std::{collections::HashMap, env, error::Error, ffi::OsStr, fmt, process::Command};
 
 const RUBY_VERSIONS: [(u8, u8); 3] = [(2, 7), (3, 0), (3, 1)];
 
@@ -33,67 +31,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    if std::env::var_os("CARGO_FEATURE_EMBED").is_some() || cfg!(windows) {
-        match (rbconfig.get("RUBY_SO_NAME"), rbconfig.get("LIBRUBY_A")) {
-            (Ok(_), Ok(_)) if env::var_os("RUBY_STATIC").is_some() => use_static(&rbconfig)?,
-            (Ok(libruby_so), _) => println!("cargo:rustc-link-lib=dylib={}", libruby_so),
-            (Err(_), Ok(_)) => use_static(&rbconfig)?,
-            (Err(e), _) => return Err(e.into()),
-        }
+    if cfg!(windows) {
         println!("cargo:rustc-link-search={}", rbconfig.get("libdir")?);
     }
 
-    let out_path = PathBuf::from(env::var("OUT_DIR")?).join("ruby_sys.rs");
-
-    // see if a pre-build ruby_sys exists
-    if let Some(ruby_target) = std::env::var("TARGET")
-        .ok()
-        .map(|t| format!("ruby-{}.{}-{}.rs", version.0, version.1, t))
-    {
-        let source_path = PathBuf::from("src").join("ruby_sys").join(ruby_target);
-        if source_path.exists() {
-            std::fs::copy(source_path, out_path)?;
-            return Ok(());
-        }
-    }
-
-    let mut builder = bindgen::Builder::default()
-        .header("ruby_sys.h")
-        .clang_arg(format!("-I{}", rbconfig.get("rubyhdrdir")?))
-        .clang_arg(format!("-I{}", rbconfig.get("rubyarchhdrdir")?));
-    for key in &[
-        "sitehdrdir",
-        "vendorhdrdir",
-        "sitearchhdrdir",
-        "vendorarchhdrdir",
-    ] {
-        if let Ok(path) = rbconfig.get(*key) {
-            builder = builder.clang_arg(format!("-I{}", path));
-        }
-    }
-    if let Ok(cc) = rbconfig.get("CC").and_then(|cc| {
-        rbconfig
-            .get("cflags")
-            .map(|flags| format!("{} {}", cc, flags))
-    }) {
-        if cc.contains("-fdeclspec") {
-            builder = builder.clang_arg("-fdeclspec");
-        }
-    }
-    let bindings = builder
-        .allowlist_function("r(b|uby)_.*")
-        .allowlist_type("(ruby_|R[A-Z]).*|rbimpl_typeddata_flags")
-        .allowlist_var("rb_.*")
-        .default_enum_style(bindgen::EnumVariation::Rust {
-            non_exhaustive: false,
-        })
-        .no_copy("rb_data_type_struct")
-        .layout_tests(false)
-        .generate_comments(false)
-        .generate()
-        .map_err(|_| BindingError())?;
-
-    bindings.write_to_file(out_path)?;
     Ok(())
 }
 

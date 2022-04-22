@@ -2,7 +2,7 @@
 
 use std::{any::Any, borrow::Cow, ffi::CString, fmt, mem::transmute, ops::Deref, os::raw::c_int};
 
-use crate::ruby_sys::{
+use rb_sys::{
     rb_ensure, rb_errinfo, rb_exc_raise, rb_jump_tag, rb_protect, rb_raise, rb_set_errinfo,
     ruby_special_consts, VALUE,
 };

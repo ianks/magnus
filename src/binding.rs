@@ -1,6 +1,6 @@
 use std::{fmt, ops::Deref};
 
-use crate::ruby_sys::rb_binding_new;
+use rb_sys::rb_binding_new;
 
 use crate::{
     class,

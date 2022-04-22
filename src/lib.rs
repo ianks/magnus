@@ -122,7 +122,6 @@ pub mod r_string;
 pub mod r_struct;
 pub mod r_typed_data;
 mod range;
-mod ruby_sys;
 pub mod scan_args;
 mod symbol;
 mod try_convert;
@@ -130,7 +129,7 @@ pub mod value;
 
 use std::{ffi::CString, mem::transmute};
 
-use crate::ruby_sys::{
+use rb_sys::{
     rb_define_class, rb_define_global_function, rb_define_module, rb_define_variable, rb_errinfo,
     rb_eval_string_protect, rb_set_errinfo, VALUE,
 };

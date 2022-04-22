@@ -11,7 +11,7 @@ use std::{
     ptr,
 };
 
-use crate::ruby_sys::{
+use rb_sys::{
     rb_any_to_s, rb_block_call, rb_check_funcall, rb_check_id, rb_enumeratorize_with_size, rb_eql,
     rb_equal, rb_float_new, rb_float_value, rb_funcallv, rb_gc_register_address,
     rb_gc_register_mark_object, rb_gc_unregister_address, rb_id2name, rb_id2sym, rb_inspect,
@@ -56,12 +56,11 @@ macro_rules! debug_assert_value {
         #[allow(unused_unsafe)]
         #[cfg(debug_assertions)]
         match unsafe { $value.rb_type() } {
-            crate::ruby_sys::ruby_value_type::RUBY_T_NONE
-            | crate::ruby_sys::ruby_value_type::RUBY_T_ZOMBIE => {
+            rb_sys::ruby_value_type::RUBY_T_NONE | rb_sys::ruby_value_type::RUBY_T_ZOMBIE => {
                 panic!("Attempting to access garbage collected Object")
             }
             #[cfg(ruby_gte_2_7)]
-            crate::ruby_sys::ruby_value_type::RUBY_T_MOVED => {
+            rb_sys::ruby_value_type::RUBY_T_MOVED => {
                 panic!("Attempting to access garbage collected Object")
             }
             _ => (),

@@ -2,7 +2,7 @@
 
 use std::{ffi::CString, fmt, mem::transmute, ops::Deref};
 
-use crate::ruby_sys::{
+use rb_sys::{
     rb_class_inherited_p, rb_const_get, rb_define_class_id_under, rb_define_method_id,
     rb_define_module_function, rb_define_module_id_under, rb_define_private_method,
     rb_define_protected_method, rb_mComparable, rb_mEnumerable, rb_mErrno, rb_mFileTest, rb_mGC,

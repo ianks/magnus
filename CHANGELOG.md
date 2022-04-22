@@ -9,6 +9,7 @@
   contents.
 
 ### Changed
+- Switched to rb-sys for low level Ruby bindings.
 - `RArray::cat`, `RArray::from_slice`, and `gc::mark_slice` will accept a
   slice of any Ruby type as an argument, rather than only a slice of `Value`.
   This may change type inference rules such that things like
@@ -20,6 +21,7 @@
 - `String::encode_utf8`, use `r_string.conv_enc(RbEncoding::utf8())` instead.
 
 ### Removed
+- Pre-built bindings for common platforms.
 
 ### Fixed
 - creating a `StaticSymbol` from a `&str` with characters outside the ASCII

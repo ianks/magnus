@@ -13,12 +13,24 @@ jobs:
         os:
         - ubuntu-latest
         - macos-latest
+        - windows-2019
         - windows-latest
         ruby-version:
         - "2.6"
         - "2.7"
         - "3.0"
         - "3.1"
+        exclude:
+        # older versions of Ruby seem to be messed up on new Windows env
+        - os: windows-latest
+          ruby-version: "2.6"
+        - os: windows-latest
+          ruby-version: "2.7"
+        - os: windows-latest
+          ruby-version: "3.0"
+        # don't bother with 3.1 on old Windows, it works fine on new Windows
+        - os: windows-2019
+          ruby-version: "3.1"
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
@@ -26,7 +38,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby-version }}
     - name: Set up Rust
-      if: matrix.os == 'windows-latest'
+      if: contains(matrix.os, 'windows')
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable-x86_64-pc-windows-gnu
