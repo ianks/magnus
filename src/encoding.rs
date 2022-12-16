@@ -169,8 +169,8 @@ impl TryConvert for Encoding {
 pub struct RbEncoding(NonNull<rb_encoding>);
 
 impl RbEncoding {
-    fn new(inner: *mut rb_encoding) -> Option<Self> {
-        NonNull::new(inner).map(Self)
+    fn new(inner: *const rb_encoding) -> Option<Self> {
+        NonNull::new(inner as *mut _).map(Self)
     }
 
     /// Returns the encoding that represents ASCII-8BIT a.k.a. binary.
@@ -674,7 +674,7 @@ impl From<RbEncoding> for Value {
 
 impl TryConvert for RbEncoding {
     fn try_convert(val: Value) -> Result<Self, Error> {
-        let mut ptr = ptr::null_mut();
+        let mut ptr = ptr::null();
         protect(|| {
             ptr = unsafe { rb_to_encoding(val.as_rb_value()) };
             QNIL
@@ -924,7 +924,7 @@ where
     T: EncodingCapable,
     U: EncodingCapable,
 {
-    let mut ptr = ptr::null_mut();
+    let mut ptr = ptr::null();
     protect(|| {
         ptr = unsafe { rb_enc_check(v1.as_rb_value(), v2.as_rb_value()) };
         QNIL

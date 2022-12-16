@@ -2135,6 +2135,7 @@ where
         };
         protect(|| {
             unsafe { rb_error_arity(len as c_int, min, max) };
+            #[allow(unreachable_code)]
             QNIL
         })?;
     }

@@ -17,7 +17,7 @@ use std::{
 use rb_sys::rbimpl_typeddata_flags::{self, RUBY_TYPED_FREE_IMMEDIATELY, RUBY_TYPED_WB_PROTECTED};
 use rb_sys::{
     self, rb_check_typeddata, rb_data_type_struct__bindgen_ty_1, rb_data_type_t,
-    rb_data_typed_object_wrap, ruby_value_type, size_t, VALUE,
+    rb_data_typed_object_wrap, ruby_value_type, VALUE,
 };
 
 #[cfg(ruby_lt_3_0)]
@@ -310,8 +310,8 @@ where
     ///
     /// This function must not panic.
     #[doc(hidden)]
-    unsafe extern "C" fn extern_size(ptr: *const c_void) -> size_t {
-        match catch_unwind(|| Self::size(&*(ptr as *const Self)) as size_t) {
+    unsafe extern "C" fn extern_size(ptr: *const c_void) -> usize {
+        match catch_unwind(|| Self::size(&*(ptr as *const Self))) {
             Ok(v) => v,
             Err(e) => bug_from_panic(e, "panic in DataTypeFunctions::size"),
         }

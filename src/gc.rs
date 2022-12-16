@@ -17,12 +17,6 @@ use crate::{
     value::{ReprValue, Value, QNIL},
 };
 
-#[cfg(target_pointer_width = "64")]
-type DiffSize = i64;
-
-#[cfg(target_pointer_width = "32")]
-type DiffSize = i32;
-
 /// Mark an Object.
 ///
 /// Used to mark any stored Ruby objects when implementing
@@ -170,7 +164,7 @@ pub fn start() {
 /// the process is using.
 ///
 /// Pass negative numbers to indicate memory has been freed.
-pub fn adjust_memory_usage(diff: DiffSize) {
+pub fn adjust_memory_usage(diff: isize) {
     unsafe { rb_gc_adjust_memory_usage(diff) };
 }
 
