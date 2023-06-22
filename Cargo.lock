@@ -13,9 +13,9 @@ dependencies = [
 
 [[package]]
 name = "bindgen"
-version = "0.60.1"
+version = "0.62.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "062dddbc1ba4aca46de6338e2bf87771414c335f7b2f2036e8f3e9befebf88e6"
+checksum = "c6720a8b7b2d39dd533285ed438d458f65b31b5c257e6ac7bb3d7e82844dd722"
 dependencies = [
  "bitflags",
  "cexpr",
@@ -28,6 +28,7 @@ dependencies = [
  "regex",
  "rustc-hash",
  "shlex",
+ "syn",
 ]
 
 [[package]]
@@ -41,6 +42,12 @@ name = "bytes"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "89b2fd2a0dcf38d7971e2194b6b6eebab45ae01067456a7fd93d5547a61b70be"
+
+[[package]]
+name = "cc"
+version = "1.0.79"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "50d30906286121d95be3d479533b458f87493b30a4b5f79a607db8f5d11aa91f"
 
 [[package]]
 name = "cexpr"
@@ -171,20 +178,19 @@ dependencies = [
 
 [[package]]
 name = "rb-sys"
-version = "0.9.71"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "156bfedced1e236600bcaad538477097ff2ed5c6b474e411d15b791e1d24c0f1"
+version = "0.9.79"
+source = "git+https://github.com/oxidize-rb/rb-sys?branch=stable-abi#56cff2fd9896fb8e6a3706fc5e30851b4f308fc8"
 dependencies = [
  "rb-sys-build",
 ]
 
 [[package]]
 name = "rb-sys-build"
-version = "0.9.71"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5cb2e4a32cbc290b543a74567072ad24b708aff7bb5dde5a68d5690379cd7938"
+version = "0.9.79"
+source = "git+https://github.com/oxidize-rb/rb-sys?branch=stable-abi#56cff2fd9896fb8e6a3706fc5e30851b4f308fc8"
 dependencies = [
  "bindgen",
+ "cc",
  "lazy_static",
  "proc-macro2",
  "quote",

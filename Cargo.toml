@@ -25,7 +25,8 @@ bytes-crate = ["bytes"]
 
 [dependencies]
 magnus-macros = { version = "0.4.0", path = "magnus-macros" }
-rb-sys = { version = "0.9.56", default-features = false, features = ["bindgen-rbimpls", "bindgen-deprecated-types"] }
+#rb-sys = { version = "0.9.56", default-features = false, features = ["bindgen-rbimpls", "bindgen-deprecated-types", "stable-abi"] }
+rb-sys = { git = "https://github.com/oxidize-rb/rb-sys", branch = "stable-abi", default-features = false, features = ["bindgen-rbimpls", "bindgen-deprecated-types"] }
 bytes = { version = "1", optional = true }
 
 [dev-dependencies]
