@@ -19,7 +19,7 @@ use std::{
 use rb_sys::rbimpl_typeddata_flags::{self, RUBY_TYPED_FREE_IMMEDIATELY, RUBY_TYPED_WB_PROTECTED};
 use rb_sys::{
     self, rb_data_type_struct__bindgen_ty_1, rb_data_type_t, rb_obj_reveal,
-    rb_singleton_class_attached, rb_singleton_class_clone, size_t, VALUE,
+    rb_singleton_class_attached, rb_singleton_class_clone, size_t, RTYPEDDATA_GET_DATA, VALUE,
 };
 
 #[cfg(ruby_lt_3_0)]
@@ -845,7 +845,12 @@ where
     /// assert_eq!(&*value, &Point { x: 4, y: 2 });
     /// ```
     fn deref(&self) -> &Self::Target {
-        self.inner.get().unwrap()
+        // Since we've already validated the inner during `TryConvert` via `RTypedData::get`, we
+        // can skip the extra checks and libruby calls and just access the data directly.
+        unsafe {
+            let data_ptr = RTYPEDDATA_GET_DATA(self.inner.as_rb_value()) as *mut Self::Target;
+            &*data_ptr
+        }
     }
 }
 

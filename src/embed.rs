@@ -5,13 +5,15 @@
 use std::{
     ffi::CString,
     ops::Deref,
+    ptr::addr_of_mut,
     sync::atomic::{AtomicBool, Ordering},
 };
 
 #[cfg(windows)]
 use rb_sys::rb_w32_sysinit;
 use rb_sys::{
-    ruby_cleanup, ruby_exec_node, ruby_process_options, ruby_set_script_name, ruby_setup,
+    ruby_cleanup, ruby_exec_node, ruby_init_stack, ruby_process_options, ruby_set_script_name,
+    ruby_setup, VALUE,
 };
 
 use crate::{
@@ -123,6 +125,8 @@ pub unsafe fn setup() -> Cleanup {
 /// ```
 #[inline(always)]
 pub unsafe fn init() -> Cleanup {
+    let mut stack_marker: VALUE = 0;
+    ruby_init_stack(addr_of_mut!(stack_marker) as *mut _);
     let cleanup = setup();
     init_options(&["-e", ""]);
     cleanup
