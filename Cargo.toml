@@ -30,7 +30,7 @@ rb-sys = []
 [dependencies]
 bytes = { version = "1", optional = true }
 magnus-macros = { version = "0.6.0", path = "magnus-macros" }
-rb-sys = { version = "0.9.85", default-features = false, features = [
+rb-sys = { version = ">=0.9.113", default-features = false, features = [
     "bindgen-rbimpls",
     "bindgen-deprecated-types",
     "stable-api",
@@ -43,12 +43,12 @@ magnus = { path = ".", default-features = false, features = [
     "rb-sys",
     "bytes",
 ] }
-rb-sys = { version = "0.9", default-features = false, features = [
+rb-sys = { version = "0.9.113", default-features = false, features = [
     "stable-api-compiled-fallback",
 ] }
 
 [build-dependencies]
-rb-sys-env = "0.1.2"
+rb-sys-env = "0.2.2"
 
 [lib]
 doc-scrape-examples = false
