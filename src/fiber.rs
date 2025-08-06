@@ -464,7 +464,7 @@ impl Fiber {
         #[cfg(ruby_lte_3_4)]
         let val_ptr = &e.as_rb_value() as *const VALUE;
         #[cfg(not(ruby_lte_3_4))]
-        let val_ptr = &e.as_rb_value() as *mut VALUE;
+        let val_ptr = &mut e.as_rb_value() as *mut VALUE;
 
         unsafe {
             protect(|| Value::new(rb_fiber_raise(self.as_rb_value(), 1, val_ptr)))
