@@ -461,15 +461,14 @@ impl Fiber {
     where
         T: TryConvert,
     {
+        #[cfg(ruby_lte_3_4)]
+        let val_ptr = &e.as_rb_value() as *const VALUE;
+        #[cfg(not(ruby_lte_3_4))]
+        let val_ptr = &e.as_rb_value() as *mut VALUE;
+
         unsafe {
-            protect(|| {
-                Value::new(rb_fiber_raise(
-                    self.as_rb_value(),
-                    1,
-                    &e.as_rb_value() as *const VALUE,
-                ))
-            })
-            .and_then(TryConvert::try_convert)
+            protect(|| Value::new(rb_fiber_raise(self.as_rb_value(), 1, val_ptr)))
+                .and_then(TryConvert::try_convert)
         }
     }
 }
